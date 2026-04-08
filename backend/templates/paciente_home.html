@@ -1,96 +1,88 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+
+{% load static %}
+
 <head>
 <meta charset="UTF-8">
 <title>Paciente - ElderLink</title>
 
 <style>
 body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-}
-
-/* HEADER */
-header {
-    background: linear-gradient(90deg, #005bb5, #007ae6);
-    padding: 20px;
-    color: white;
-    font-size: 22px;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* CONTAINER */
-.container {
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 80px);
+    height: 100vh;
+
+    background: 
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url("{% static 'img/fundo.jpg' %}") no-repeat center center;
+
+    background-size: cover;
 }
 
-/* PAINEL */
+/* CONTAINER IGUAL LOGIN */
 .painel {
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(6px);
+    background: white;
     padding: 30px;
-    width: 420px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    width: 380px;
 }
 
-/* TITULOS */
+/* TITULO */
 .titulo {
-    color: #005bb5;
+    text-align: center;
     margin-bottom: 5px;
 }
 
 .subtitulo {
-    color: #444;
+    text-align: center;
     font-size: 14px;
+    color: #555;
     margin-bottom: 20px;
 }
 
-/* BOTÃO */
+/* BOTÕES */
 .botao {
-    background: #005bb5;
-    color: white;
+    margin-top: 10px;
+    width: 100%;
     padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.25s;
+    background: rgb(31,85,168);
+    color: white;
     border: none;
-    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
     display: block;
+    text-decoration: none;
+    font-size: 14px;
+     box-sizing: border-box;
 }
 
 .botao:hover {
-    background: #007ae6;
-    transform: translateY(-2px);
+    opacity: 0.9;
 }
 
 /* LISTAS */
 .lista {
     display: none;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .mostrar {
     display: block;
 }
 
-/* ITEM */
+/* ITENS */
 .item {
-    background: #f4f7ff;
-    border-left: 4px solid #005bb5;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.item strong {
-    color: #005bb5;
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 /* TEXTO VAZIO */
@@ -98,89 +90,84 @@ header {
     text-align: center;
     color: #777;
     font-size: 14px;
+    margin-top: 10px;
 }
 
+/* ESPAÇAMENTO */
 .mt-20 {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    Área do Paciente
-</header>
+<div class="painel">
 
-<div class="container">
-    <div class="painel">
+    <h2 class="titulo">Bem-vindo(a), {{ request.user.first_name }}!</h2>
 
-        <h2 class="titulo">Bem-vindo, {{ request.user.first_name }}</h2>
-        <p class="subtitulo">
-            Aqui você pode visualizar seus dados e acessar seus atendimentos.
-        </p>
+    <p class="subtitulo">
+        Aqui você pode visualizar suas consultas e medicamentos, além de acessar diretamente a consulta online com o seu médico
+    </p>
 
-        <!-- BOTÕES -->
-        <div class="botao" id="btnConsultas">
-            Ver Consultas
-        </div>
+    <!-- BOTÕES -->
+    <button class="botao" id="btnConsultas">
+        Ver Consultas
+    </button>
 
-        <div class="botao mt-20" id="btnMedicamentos">
-            Ver Medicamentos
-        </div>
+    <button class="botao" id="btnMedicamentos">
+        Ver Medicamentos
+    </button>
 
-        <!-- CONSULTAS -->
-        <div class="lista" id="listaConsultas">
+    <!-- CONSULTAS -->
+    <div class="lista" id="listaConsultas">
 
-            {% if agendamentos %}
-                {% for agendamento in agendamentos %}
-                    <div class="item">
+        {% if agendamentos %}
+            {% for agendamento in agendamentos %}
+                <div class="item">
+                    <strong>Médico:</strong>
+                    {{ agendamento.horario.periodo.agenda.medico.user.first_name }}<br>
 
-                        <strong>Médico:</strong>
-                        {{ agendamento.horario.periodo.agenda.medico.user.first_name }}<br>
+                    <strong>Especialidade:</strong>
+                    {{ agendamento.horario.periodo.agenda.medico.medicoespecialidade_set.first.especialidade.nome }}<br>
 
-                        <strong>Especialidade:</strong>
-                        {{ agendamento.horario.periodo.agenda.medico.medicoespecialidade_set.first.especialidade.nome }}<br>
+                    <strong>Data:</strong>
+                    {{ agendamento.horario.inicio|date:"d/m/Y" }}<br>
 
-                        <strong>Data:</strong>
-                        {{ agendamento.horario.inicio|date:"d/m/Y" }}<br>
-
-                        <strong>Horário:</strong>
-                        {{ agendamento.horario.inicio|date:"H:i" }}
-
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="vazio">
-                    Você não possui consultas agendadas.
+                    <strong>Horário:</strong>
+                    {{ agendamento.horario.inicio|date:"H:i" }}
                 </div>
-            {% endif %}
-
-        </div>
-
-        <!-- MEDICAMENTOS -->
-        <div class="lista" id="listaMedicamentos">
-
-            {% if medicamentos %}
-                {% for medicamento in medicamentos %}
-                    <div class="item">
-                        <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="vazio">
-                    Você não possui medicamentos cadastrados.
-                </div>
-            {% endif %}
-
-        </div>
-
-        <!-- BOTÃO CONSULTA -->
-        <a href="http://localhost:3000" target="_blank" class="botao mt-20">
-            Iniciar Consulta
-        </a>
+            {% endfor %}
+        {% else %}
+            <div class="vazio">
+                Você não possui consultas agendadas.
+            </div>
+        {% endif %}
 
     </div>
+
+    <!-- MEDICAMENTOS -->
+    <div class="lista" id="listaMedicamentos">
+
+        {% if medicamentos %}
+            {% for medicamento in medicamentos %}
+                <div class="item">
+                    <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="vazio">
+                Você não possui medicamentos cadastrados.
+            </div>
+        {% endif %}
+
+    </div>
+
+    <!-- BOTÃO CONSULTA -->
+    <a href="http://localhost:3000" target="_blank" class="botao mt-20">
+        Iniciar Consulta
+    </a>
+
 </div>
 
 <script>
