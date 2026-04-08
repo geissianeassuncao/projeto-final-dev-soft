@@ -2,278 +2,196 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Área do Paciente - ElderLink</title>
+<title>Paciente - ElderLink</title>
 
 <style>
-
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #eef3f8;
+
 }
 
+/* HEADER */
 header {
     background: linear-gradient(90deg, #005bb5, #007ae6);
-    padding: 22px;
+    padding: 20px;
     color: white;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 600;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-align: center;
 }
 
+/* CONTAINER */
 .container {
-    padding: 35px;
-    display: grid;
-    grid-template-columns: 1.9fr 0.6fr;
-    gap: 30px;
-    min-height: calc(100vh - 90px);
-}
-
-.card {
-    background: white;
-    padding: 28px;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
-
-h2 {
-    color: #005bb5;
-    margin-top: 0;
-    font-weight: 600;
-}
-
-.agendamento-item {
-    background: #f5f8ff;
-    border-left: 5px solid #005bb5;
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
-
-/* BARRA LATERAL */
-.card-lateral {
-    background: linear-gradient(180deg, #ffffff, #f0f5ff);
-    border-left: 2px solid #dbe5ff;
-    padding: 25px;
-    border-radius: 0;
-    box-shadow: -3px 0 10px rgba(0,0,0,0.05);
     display: flex;
-    flex-direction: column;
-}
-
-/* ATALHOS */
-.atalhos {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.atalho {
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: .2s;
-    border: 1px solid #e4ebff;
+    height: calc(100vh - 80px);
 }
 
-.atalho:hover {
-    background: #e8f0ff;
-    transform: scale(1.03);
+/* PAINEL */
+.painel {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+    padding: 30px;
+    width: 420px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* TITULOS */
+.titulo {
+    color: #005bb5;
+    margin-bottom: 5px;
+}
+
+.subtitulo {
+    color: #444;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* BOTÃO PADRÃO */
+.botao {
+    background: #005bb5;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.25s;
+    border: none;
+    text-decoration: none;
+    display: block;
+}
+
+.botao:hover {
+    background: #007ae6;
+    transform: translateY(-2px);
 }
 
 /* LISTAS */
-.lista-agendamentos,
-.lista-medicamentos {
+.lista {
     display: none;
-    margin-top: 15px;
-    opacity: 0;
-    transition: 0.3s;
+    margin-top: 20px;
 }
 
 .mostrar {
     display: block;
-    opacity: 1;
 }
 
-/* TEXTO */
-.texto-saude {
-    font-size: 15.5px;
-    line-height: 1.7;
-    color: #333;
-    text-align: justify;
+/* ITEM */
+.item {
+    background: #f4f7ff;
+    border-left: 4px solid #005bb5;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
-.texto-saude p {
-    margin-bottom: 14px;
-    text-indent: 25px;
-}
-
-.texto-saude strong {
+.item strong {
     color: #005bb5;
 }
 
-/* CONSULTA ONLINE */
-.consulta-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f4f8fc;
-    border-radius: 10px;
-}
-
-.btn-chamada {
-    display: inline-block;
-    width: 100%;
+/* TEXTO VAZIO */
+.vazio {
     text-align: center;
-    padding: 12px;
-    background: #28a745;
-    color: white;
-    border-radius: 6px;
-    font-size: 15px;
-    text-decoration: none;
-    transition: 0.2s;
+    color: #777;
+    font-size: 14px;
 }
 
-.btn-chamada:hover {
-    background: #218838;
-    transform: scale(1.02);
+/* ESPAÇO */
+.mt-20 {
+    margin-top: 20px;
 }
-
-/* RESPONSIVO */
-@media (max-width: 800px) {
-    .container {
-        grid-template-columns: 1fr;
-    }
-
-    .card-lateral {
-        border-left: none;
-        border-top: 2px solid #dbe5ff;
-    }
-}
-
 </style>
-
 </head>
+
 <body>
 
 <header>
-    Bem-vindo, {{ request.user.first_name }}!
+    Área do Paciente
 </header>
 
 <div class="container">
+    <div class="painel">
 
-<!-- CAMPANHA -->
-<div class="card"> 
-    <h2>📢 Saúde da pessoa idosa</h2>
-
-    <div class="texto-saude">
-
-        <p>
-            O perfil de saúde da população idosa é caracterizado principalmente pela presença de 
-            <strong>doenças crônicas</strong>, problemas de saúde agudos e agravamento de doenças existentes.
+        <h2 class="titulo">Bem-vindo, {{ request.user.first_name }}</h2>
+        <p class="subtitulo">
+            Aqui você pode visualizar seus dados e acessar seus atendimentos.
         </p>
 
-        <p>
-            Mesmo assim, muitos idosos mantêm autonomia e qualidade de vida com acompanhamento adequado.
-        </p>
+        <!-- BOTÕES -->
+        <div class="botao" id="btnConsultas">
+            Ver Consultas
+        </div>
 
-        <p>
-            O <strong>Plano Internacional para o Envelhecimento</strong> (ONU, 2002) trouxe diretrizes para um envelhecimento digno.
-        </p>
+        <div class="botao mt-20" id="btnMedicamentos">
+            Ver Medicamentos
+        </div>
 
-        <p>
-            A <strong>Década do Envelhecimento Saudável (2021–2030)</strong> busca melhorar a vida dos idosos globalmente.
-        </p>
+        <!-- CONSULTAS -->
+        <div class="lista" id="listaConsultas">
 
-    </div>
+            {% if agendamentos %}
+                {% for agendamento in agendamentos %}
+                    <div class="item">
+                        <strong>Médico:</strong> {{ agendamento.medico.user.first_name }}<br>
+                        <strong>Especialidade:</strong> {{ agendamento.medico.especialidade.nome }}<br>
+                        <strong>Data:</strong> {{ agendamento.data }}<br>
+                        <strong>Horário:</strong> {{ agendamento.horario.hora }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="vazio">
+                    Você não possui consultas agendadas.
+                </div>
+            {% endif %}
 
-    <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-idosa" target="_blank">
-        Saiba mais
-    </a>
-</div>
+        </div>
 
-<!-- BARRA LATERAL -->
-<div class="card card-lateral">
-    <h2>Seus Serviços</h2>
+        <!-- MEDICAMENTOS -->
+        <div class="lista" id="listaMedicamentos">
 
-    <div class="atalhos">
-        <div class="atalho" id="btnAgendamentos">🩺 Consultas</div>
-        <div class="atalho" id="btnMedicamentos">💊 Remédios</div>
-    </div>
+            {% if medicamentos %}
+                {% for medicamento in medicamentos %}
+                    <div class="item">
+                        <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="vazio">
+                    Você não possui medicamentos cadastrados.
+                </div>
+            {% endif %}
 
-    <!-- CONSULTAS -->
-    <div class="lista-agendamentos" id="listaAgendamentos">
+        </div>
 
-        {% if agendamentos %}
-        {% for agendamento in agendamentos %}
-            <div class="agendamento-item">
-                <strong>Médico:</strong> {{ agendamento.medico.user.first_name }}<br>
-                <strong>Especialidade:</strong> {{ agendamento.medico.especialidade.nome }}<br>
-                <strong>Data:</strong> {{ agendamento.data }}<br>
-                <strong>Horário:</strong> {{ agendamento.horario.hora }}
-            </div>
-        {% endfor %}
-        {% else %}
-        <p style="color: gray; text-align: center;">
-            Você ainda não possui consultas agendadas.
-        </p>
-        {% endif %}
-
-    </div>
-
-    <!-- MEDICAMENTOS -->
-    <div class="lista-medicamentos" id="listaMedicamentos">
-
-        {% if medicamentos %}
-        {% for medicamento in medicamentos %}
-            <div class="agendamento-item">
-                <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}
-            </div>
-        {% endfor %}
-        {% else %}
-        <p style="color: gray; text-align: center;">
-            Você ainda não possui remédios.
-        </p>
-        {% endif %}
-
-    </div>
-
-    <!-- CONSULTA ONLINE -->
-    <div class="consulta-box">
-        <h3>Consulta Online</h3>
-
-        <a href="http://localhost:3000" target="_blank" class="btn-chamada">
-            📞 Iniciar Consulta
+        <!-- BOTÃO CONSULTA -->
+        <a href="http://localhost:3000" target="_blank" class="botao mt-20">
+            Iniciar Consulta
         </a>
+
     </div>
-
-</div>
-
 </div>
 
 <script>
+const btnConsultas = document.getElementById("btnConsultas");
+const btnMedicamentos = document.getElementById("btnMedicamentos");
 
-const btnAg = document.getElementById("btnAgendamentos");
-const btnMed = document.getElementById("btnMedicamentos");
+const listaConsultas = document.getElementById("listaConsultas");
+const listaMedicamentos = document.getElementById("listaMedicamentos");
 
-const listaAg = document.getElementById("listaAgendamentos");
-const listaMed = document.getElementById("listaMedicamentos");
-
-btnAg.addEventListener("click", function () {
-    listaAg.classList.toggle("mostrar");
-    listaMed.classList.remove("mostrar");
+btnConsultas.addEventListener("click", function () {
+    listaConsultas.classList.toggle("mostrar");
+    listaMedicamentos.classList.remove("mostrar");
 });
 
-btnMed.addEventListener("click", function () {
-    listaMed.classList.toggle("mostrar");
-    listaAg.classList.remove("mostrar");
+btnMedicamentos.addEventListener("click", function () {
+    listaMedicamentos.classList.toggle("mostrar");
+    listaConsultas.classList.remove("mostrar");
 });
-
 </script>
 
 </body>

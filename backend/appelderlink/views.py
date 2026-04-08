@@ -58,6 +58,10 @@ class PeriodoViewSet(viewsets.ModelViewSet):
     queryset = models.Periodo.objects.all()
     serializer_class = PeriodoSerializer
 
+    def perform_create(self, serializer):
+        periodo = serializer.save()
+        periodo.gerar_horarios()
+
 
 class HorarioViewSet(viewsets.ModelViewSet):
     queryset = models.Horario.objects.all()

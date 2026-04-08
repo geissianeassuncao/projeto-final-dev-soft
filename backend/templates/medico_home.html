@@ -8,91 +8,109 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #eef3f8;
+    
 }
 
+/* HEADER */
 header {
     background: linear-gradient(90deg, #005bb5, #007ae6);
     padding: 20px;
     color: white;
     font-size: 22px;
     font-weight: 600;
+    text-align: center;
 }
 
+/* CONTAINER */
 .container {
-    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px);
 }
 
+/* PAINEL (efeito glass leve) */
 .painel {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(6px);
     padding: 30px;
-    width: 350px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    width: 420px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-h1 {
+/* TITULOS */
+.titulo {
     color: #005bb5;
-    margin-top: 0;
-    font-size: 22px;
+    margin-bottom: 5px;
 }
 
-/* BOTÃO CONSULTAS */
-.consultas {
-    margin-top: 16px;
+.subtitulo {
+    color: #444;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* BOTÕES PADRÃO */
+.botao {
     background: #005bb5;
     color: white;
-    padding: 10px;
-    border-radius: 6px;
-    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
     font-weight: 500;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.25s;
+    border: none;
+    text-decoration: none;
+    display: block;
 }
 
-.consultas:hover {
+.botao:hover {
     background: #007ae6;
-    transform: scale(1.03);
+    transform: translateY(-2px);
 }
 
-/* LISTA ESCONDIDA */
+/* LISTA */
 .lista-consultas {
     display: none;
-    margin-top: 15px;
-    opacity: 0;
-    transition: 0.3s;
+    margin-top: 20px;
 }
 
 .mostrar {
     display: block;
-    opacity: 1;
 }
 
-/* ITEM CONSULTA */
+/* CONSULTA */
 .consulta-item {
-    background: #f5f8ff;
-    border-left: 5px solid #005bb5;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-}
-
-/* BOTÃO CHAMADA */
-.btn-chamada {
-    display: inline-block;
-    margin-top: 15px;
-    background: #28a745;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
+    background: #f4f7ff;
+    border-left: 4px solid #005bb5;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
     transition: 0.2s;
 }
 
-.btn-chamada:hover {
-    background: #218838;
-    transform: scale(1.03);
+.consulta-item:hover {
+    background: #e9f0ff;
+}
+
+/* TEXTO */
+.consulta-item strong {
+    color: #005bb5;
+}
+
+/* TEXTO VAZIO */
+.vazio {
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ESPAÇAMENTO */
+.mt-20 {
+    margin-top: 20px;
 }
 </style>
 </head>
@@ -105,10 +123,14 @@ h1 {
 
 <div class="container">
     <div class="painel">
-        <h1>Bem-vindo, {{ request.user.first_name }}!</h1>
 
-        <div class="consultas" id="btnConsultas">
-            🩺 Ver Consultas
+        <h2 class="titulo">Bem-vindo, {{ request.user.first_name }}!</h2>
+        <p class="subtitulo">
+            Aqui você pode visualizar sua agenda e iniciar atendimentos online.
+        </p>
+
+        <div class="botao" id="btnConsultas">
+            Ver Consultas
         </div>
 
         <div class="lista-consultas" id="listaConsultas">
@@ -122,17 +144,15 @@ h1 {
                     </div>
                 {% endfor %}
             {% else %}
-                <p style="color: gray; text-align: center;">
+                <div class="vazio">
                     Você não possui consultas agendadas.
-                </p>
+                </div>
             {% endif %}
 
         </div>
 
-        <h3 style="margin-top: 20px;">Atendimento Online</h3>
-
-        <a href="http://localhost:3000" target="_blank" class="btn-chamada">
-            📞 Iniciar Consulta
+        <a href="http://localhost:3000" target="_blank" class="botao mt-20">
+            Iniciar Consulta
         </a>
 
     </div>
