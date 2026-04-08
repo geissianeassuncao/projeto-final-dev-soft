@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ElderLink</title>
+
+    {% load static %}
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            height: 100vh;
+
+            /* IMAGEM + OVERLAY */
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url("{% static 'img/idoso-internet.jpg' %}") no-repeat center center;
+
+            background-size: cover;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: #0066cc;
+            margin-bottom: 40px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .card {
+            width: 100px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            color: black;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .material-icons {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #0066cc;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Bem-vindo ao ElderLink!</h1>
+
+    <div class="options">
+
+        <a href="/login/?tipo=paciente" class="card">
+            <span class="material-icons">account_circle</span>
+            <h2>Paciente</h2>
+        </a>
+
+        <a href="/login/?tipo=medico" class="card">
+            <span class="material-icons">medical_services</span>
+            <h2>Médico</h2>
+        </a>
+
+    </div>
+</div>
+
+</body>
+</html>

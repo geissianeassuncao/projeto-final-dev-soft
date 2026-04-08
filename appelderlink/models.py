@@ -2,8 +2,28 @@ from django.db import models
 from datetime import datetime, timedelta, time
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 
+# ------------------------------------------------------------
+#  CUSTOM USER (novo modelo de usuário)
+# ------------------------------------------------------------
+class CustomUser(AbstractUser):
+    TIPOS = (
+        ('paciente', 'Paciente'),
+        ('medico', 'Médico'),
+    )
+
+    tipo = models.CharField(max_length=20, choices=TIPOS)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.tipo})"
+
+
+# ------------------------------------------------------------
+#  MODELO BASE
+# ------------------------------------------------------------
 class ModeloBase(models.Model):
     id = models.BigAutoField(primary_key=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
@@ -13,9 +33,12 @@ class ModeloBase(models.Model):
         abstract = True
 
 
+# ------------------------------------------------------------
+#  ENDEREÇO: ESTADO E CIDADE
+# ------------------------------------------------------------
 class Estado(ModeloBase):
-    nome = models.CharField(max_length=100, null=False, blank=False)
-    sigla = models.CharField(max_length=2, unique=True, null=False, blank=False)
+    nome = models.CharField(max_length=100)
+    sigla = models.CharField(max_length=2, unique=True)
 
     def __str__(self):
         return f"{self.nome} - {self.sigla}"
@@ -26,7 +49,7 @@ class Estado(ModeloBase):
 
 
 class Cidade(ModeloBase):
-    nome = models.CharField(max_length=150, null=False, blank=False)
+    nome = models.CharField(max_length=150)
 
     estado = models.ForeignKey(
         Estado,
@@ -45,21 +68,29 @@ class Cidade(ModeloBase):
         return f"{self.nome} - {self.estado.sigla}"
 
 
+# ------------------------------------------------------------
+#  MÉDICO
+# ------------------------------------------------------------
 class Medico(ModeloBase):
-    nome = models.CharField(max_length=200, null=False, blank=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     telefone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    senha = models.CharField(max_length=100, default="1234")
 
     def __str__(self):
-        return self.nome
+        return self.user.first_name or self.user.username
 
     class Meta:
         verbose_name = 'Medico'
         verbose_name_plural = 'Medicos'
 
 
+# ------------------------------------------------------------
+#  ESPECIALIDADE
+# ------------------------------------------------------------
 class Especialidade(ModeloBase):
-    nome = models.CharField(max_length=150, null=False, blank=False)
+    nome = models.CharField(max_length=150)
 
     def __str__(self):
         return self.nome
@@ -72,34 +103,33 @@ class Especialidade(ModeloBase):
 class MedicoEspecialidade(ModeloBase):
     medico = models.ForeignKey(
         Medico,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False
+        on_delete=models.CASCADE
     )
     especialidade = models.ForeignKey(
         Especialidade,
-        on_delete=models.PROTECT,
-        null=False,
-        blank=False
+        on_delete=models.PROTECT
     )
 
     def __str__(self):
-        return f"{self.medico.nome} - {self.especialidade.nome}"
+        return f"{self.medico} - {self.especialidade}"
 
     class Meta:
         verbose_name = "MedicoEspecialidade"
         verbose_name_plural = "MedicoEspecialidades"
 
 
+# ------------------------------------------------------------
+#  PACIENTE
+# ------------------------------------------------------------
 class Paciente(ModeloBase):
-    nome = models.CharField(max_length=200, null=False, blank=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     telefone = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    idade = models.IntegerField(null=False, blank=False)
-    rua = models.CharField(max_length=200, null=False, blank=False)
-    numero = models.IntegerField(null=False, blank=False)
-    bairro = models.CharField(max_length=150, null=False, blank=False)
-    cep = models.CharField(max_length=20, null=False, blank=False)
+    idade = models.IntegerField()
+    rua = models.CharField(max_length=200)
+    numero = models.IntegerField()
+    bairro = models.CharField(max_length=150)
+    cep = models.CharField(max_length=20)
     referencia = models.TextField(null=True, blank=True)
 
     cidade = models.ForeignKey(
@@ -109,13 +139,16 @@ class Paciente(ModeloBase):
     )
 
     def __str__(self):
-        return self.nome
+        return self.user.first_name or self.user.username
 
     class Meta:
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pacientes'
 
 
+# ------------------------------------------------------------
+#  AGENDA E PERIODOS
+# ------------------------------------------------------------
 class Agenda(ModeloBase):
     medico = models.ForeignKey(
         Medico,
@@ -127,7 +160,7 @@ class Agenda(ModeloBase):
     duracao_consulta = models.IntegerField(default=30)
 
     def __str__(self):
-        return f"Agenda de {self.medico.nome} ({self.data_inicial} a {self.data_final})"
+        return f"Agenda de {self.medico} ({self.data_inicial} a {self.data_final})"
 
 
 class Periodo(ModeloBase):
@@ -136,11 +169,11 @@ class Periodo(ModeloBase):
         on_delete=models.CASCADE,
         related_name="periodos"
     )
-    inicio = models.TimeField(default=time(8,0))
+    inicio = models.TimeField(default=time(8, 0))
     fim = models.TimeField(default=time(22, 0))
 
     def __str__(self):
-        return f"{self.inicio} - {self.fim} ({self.agenda.medico.nome})"
+        return f"{self.inicio} - {self.fim} ({self.agenda.medico})"
 
     def gerar_horarios(self):
         from .models import Horario
@@ -158,11 +191,12 @@ class Periodo(ModeloBase):
             inicio_dia = datetime.combine(data_atual, self.inicio)
             fim_dia = datetime.combine(data_atual, self.fim)
 
-            if tz is not None and timezone.is_naive(inicio_dia):
+            if tz and timezone.is_naive(inicio_dia):
                 inicio_dia = timezone.make_aware(inicio_dia, tz)
                 fim_dia = timezone.make_aware(fim_dia, tz)
 
             horario_inicio = inicio_dia
+
             while horario_inicio + duracao <= fim_dia:
                 horario_fim = horario_inicio + duracao
 
@@ -172,6 +206,7 @@ class Periodo(ModeloBase):
                     fim=horario_fim,
                     defaults={"disponivel": True},
                 )
+
                 horarios_criados.append(horario_obj)
                 horario_inicio = horario_fim
 
@@ -180,6 +215,9 @@ class Periodo(ModeloBase):
         return horarios_criados
 
 
+# ------------------------------------------------------------
+#  HORÁRIOS E AGENDAMENTOS
+# ------------------------------------------------------------
 class Horario(ModeloBase):
     periodo = models.ForeignKey(
         Periodo,
@@ -210,14 +248,17 @@ class Agendamento(ModeloBase):
 
     def __str__(self):
         if self.horario:
-            return f"{self.paciente.nome} - {self.horario.inicio:%d/%m %H:%M}"
-        return f"{self.paciente.nome} (sem horário definido)"
+            return f"{self.paciente} - {self.horario.inicio:%d/%m %H:%M}"
+        return f"{self.paciente} (sem horário definido)"
 
     class Meta:
         verbose_name = "Agendamento"
         verbose_name_plural = "Agendamentos"
 
 
+# ------------------------------------------------------------
+#  RECEITAS E MEDICAMENTOS
+# ------------------------------------------------------------
 class Receita(ModeloBase):
     data = models.DateTimeField(auto_now_add=True)
     medico = models.ForeignKey(
@@ -232,7 +273,7 @@ class Receita(ModeloBase):
     )
 
     def __str__(self):
-        return f"Receita de {self.medico.nome} para {self.paciente.nome} ({self.data:%d/%m/%Y})"
+        return f"Receita de {self.medico} para {self.paciente} ({self.data:%d/%m/%Y})"
 
 
 class Medicamento(ModeloBase):

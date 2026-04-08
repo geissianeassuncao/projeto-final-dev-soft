@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Médico - ElderLink</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #eef3f8;
+}
+
+header {
+    background: linear-gradient(90deg, #005bb5, #007ae6);
+    padding: 20px;
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.container {
+    padding: 30px;
+}
+
+.painel {
+    background: white;
+    padding: 30px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #005bb5;
+    margin-top: 0;
+    font-size: 22px;
+}
+
+/* BOTÃO */
+.consultas {
+    margin-top: 16px;
+    background: #005bb5;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.consultas:hover {
+    background: #007ae6;
+    transform: scale(1.03);
+}
+
+/* LISTA ESCONDIDA */
+.lista-consultas {
+    display: none;
+    margin-top: 15px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.mostrar {
+    display: block;
+    opacity: 1;
+}
+
+/* ITEM */
+.consulta-item {
+    background: #f5f8ff;
+    border-left: 5px solid #005bb5;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    Área do Médico
+</header>
+
+<div class="container">
+    <div class="painel">
+        <h1>Bem-vindo, {{ request.user.first_name }}!</h1>
+
+        <div class="consultas" id="btnConsultas">
+            🩺 Ver Consultas
+        </div>
+
+        <div class="lista-consultas" id="listaConsultas">
+
+            {% if consultas %}
+                {% for consulta in consultas %}
+                    <div class="consulta-item">
+                        <strong>Paciente:</strong> {{ consulta.paciente.user.first_name }}<br>
+                        <strong>Data:</strong> {{ consulta.data }}<br>
+                        <strong>Horário:</strong> {{ consulta.horario.hora }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: gray; text-align: center;">
+                    Você não possui consultas agendadas.
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("btnConsultas").addEventListener("click", function () {
+    const lista = document.getElementById("listaConsultas");
+    lista.classList.toggle("mostrar");
+});
+</script>
+
+</body>
+</html>
