@@ -37,7 +37,7 @@ h1 {
     font-size: 22px;
 }
 
-/* BOTÃO */
+/* BOTÃO CONSULTAS */
 .consultas {
     margin-top: 16px;
     background: #005bb5;
@@ -68,13 +68,31 @@ h1 {
     opacity: 1;
 }
 
-/* ITEM */
+/* ITEM CONSULTA */
 .consulta-item {
     background: #f5f8ff;
     border-left: 5px solid #005bb5;
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 10px;
+}
+
+/* BOTÃO CHAMADA */
+.btn-chamada {
+    display: inline-block;
+    margin-top: 15px;
+    background: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-chamada:hover {
+    background: #218838;
+    transform: scale(1.03);
 }
 </style>
 </head>
@@ -110,6 +128,12 @@ h1 {
             {% endif %}
 
         </div>
+
+        <h3 style="margin-top: 20px;">Atendimento Online</h3>
+
+        <a href="http://localhost:3000" target="_blank" class="btn-chamada">
+            📞 Iniciar Consulta
+        </a>
 
     </div>
 </div>

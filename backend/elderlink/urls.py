@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from appelderlink.views import home
-from appelderlink.views import login_view, home, paciente_home, medico_home
+from backend.appelderlink.views import home
+from backend.appelderlink.views import login_view, home, paciente_home, medico_home
 from django.contrib.auth import views as auth_views
 
 

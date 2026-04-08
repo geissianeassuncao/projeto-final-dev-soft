@@ -69,7 +69,6 @@ h2 {
     gap: 12px;
 }
 
-
 .atalho {
     background: white;
     padding: 10px;
@@ -88,15 +87,8 @@ h2 {
     transform: scale(1.03);
 }
 
-/* LISTA ESCONDIDA */
-.lista-agendamentos {
-    display: none;
-    margin-top: 15px;
-    overflow-y: auto;
-    opacity: 0;
-    transition: 0.3s;
-}
-
+/* LISTAS */
+.lista-agendamentos,
 .lista-medicamentos {
     display: none;
     margin-top: 15px;
@@ -107,6 +99,49 @@ h2 {
 .mostrar {
     display: block;
     opacity: 1;
+}
+
+/* TEXTO */
+.texto-saude {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #333;
+    text-align: justify;
+}
+
+.texto-saude p {
+    margin-bottom: 14px;
+    text-indent: 25px;
+}
+
+.texto-saude strong {
+    color: #005bb5;
+}
+
+/* CONSULTA ONLINE */
+.consulta-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f4f8fc;
+    border-radius: 10px;
+}
+
+.btn-chamada {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border-radius: 6px;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-chamada:hover {
+    background: #218838;
+    transform: scale(1.02);
 }
 
 /* RESPONSIVO */
@@ -120,23 +155,6 @@ h2 {
         border-top: 2px solid #dbe5ff;
     }
 }
-
-    .texto-saude {
-    font-size: 15.5px;
-    line-height: 1.7;
-    color: #333;
-    text-align: justify;
-}
-
-    .texto-saude p {
-        margin-bottom: 14px;
-        text-indent: 25px;
-    }
-
-    .texto-saude strong {
-        color: #005bb5;
-    }
-
 
 </style>
 
@@ -157,28 +175,19 @@ h2 {
 
         <p>
             O perfil de saúde da população idosa é caracterizado principalmente pela presença de 
-            <strong>doenças crônicas</strong>, problemas de saúde agudos causados por fatores externos 
-            e pelo agravamento de doenças já existentes. Muitos idosos convivem com enfermidades duradouras 
-            e enfrentam riscos de adoecimento súbito, seja por acidentes ou por complicações agudas.
+            <strong>doenças crônicas</strong>, problemas de saúde agudos e agravamento de doenças existentes.
         </p>
 
         <p>
-            Apesar dessas condições, destaca-se que nem sempre as doenças crônicas limitam as atividades 
-            diárias, a participação social ou o exercício da cidadania. Em muitos casos, o idoso mantém 
-            autonomia e papel ativo na sociedade, desde que tenha acompanhamento médico e qualidade de vida.
+            Mesmo assim, muitos idosos mantêm autonomia e qualidade de vida com acompanhamento adequado.
         </p>
 
         <p>
-            No contexto internacional, o envelhecimento da população passou a ser discutido de forma ampla 
-            a partir do <strong>Plano Internacional para o Envelhecimento</strong>, promovido pela ONU em 2002, 
-            na cidade de Madri. O objetivo foi estabelecer diretrizes para garantir um envelhecimento digno, 
-            seguro e com direitos assegurados.
+            O <strong>Plano Internacional para o Envelhecimento</strong> (ONU, 2002) trouxe diretrizes para um envelhecimento digno.
         </p>
 
         <p>
-            Mais recentemente, em dezembro de 2020, a Assembleia Geral das Nações Unidas instituiu a 
-            <strong>Década do Envelhecimento Saudável (2021–2030)</strong> como estratégia global para promover 
-            o bem-estar dos idosos e construir uma sociedade mais inclusiva para todas as faixas etárias.
+            A <strong>Década do Envelhecimento Saudável (2021–2030)</strong> busca melhorar a vida dos idosos globalmente.
         </p>
 
     </div>
@@ -188,16 +197,16 @@ h2 {
     </a>
 </div>
 
-
 <!-- BARRA LATERAL -->
 <div class="card card-lateral">
-    <h2 >Seus Serviços</h2>
+    <h2>Seus Serviços</h2>
 
     <div class="atalhos">
         <div class="atalho" id="btnAgendamentos">🩺 Consultas</div>
         <div class="atalho" id="btnMedicamentos">💊 Remédios</div>
     </div>
 
+    <!-- CONSULTAS -->
     <div class="lista-agendamentos" id="listaAgendamentos">
 
         {% if agendamentos %}
@@ -209,31 +218,39 @@ h2 {
                 <strong>Horário:</strong> {{ agendamento.horario.hora }}
             </div>
         {% endfor %}
-    {% else %}
+        {% else %}
         <p style="color: gray; text-align: center;">
             Você ainda não possui consultas agendadas.
         </p>
-    {% endif %}
+        {% endif %}
 
     </div>
 
+    <!-- MEDICAMENTOS -->
     <div class="lista-medicamentos" id="listaMedicamentos">
 
         {% if medicamentos %}
         {% for medicamento in medicamentos %}
-            <div class="medicamento-item">
-                <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}<br>
-               
+            <div class="agendamento-item">
+                <strong>Nome:</strong> {{ medicamento.nome }} - {{ medicamento.dosagem }}
             </div>
         {% endfor %}
-    {% else %}
+        {% else %}
         <p style="color: gray; text-align: center;">
             Você ainda não possui remédios.
         </p>
-    {% endif %}
+        {% endif %}
 
     </div>
 
+    <!-- CONSULTA ONLINE -->
+    <div class="consulta-box">
+        <h3>Consulta Online</h3>
+
+        <a href="http://localhost:3000" target="_blank" class="btn-chamada">
+            📞 Iniciar Consulta
+        </a>
+    </div>
 
 </div>
 
@@ -249,13 +266,14 @@ const listaMed = document.getElementById("listaMedicamentos");
 
 btnAg.addEventListener("click", function () {
     listaAg.classList.toggle("mostrar");
-    listaMed.classList.remove("mostrar"); // fecha remédios
+    listaMed.classList.remove("mostrar");
 });
 
 btnMed.addEventListener("click", function () {
     listaMed.classList.toggle("mostrar");
-    listaAg.classList.remove("mostrar"); // fecha consultas
+    listaAg.classList.remove("mostrar");
 });
+
 </script>
 
 </body>
