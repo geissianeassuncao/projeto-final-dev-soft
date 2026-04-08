@@ -8,7 +8,6 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-
 }
 
 /* HEADER */
@@ -51,7 +50,7 @@ header {
     margin-bottom: 20px;
 }
 
-/* BOTÃO PADRÃO */
+/* BOTÃO */
 .botao {
     background: #005bb5;
     color: white;
@@ -101,7 +100,6 @@ header {
     font-size: 14px;
 }
 
-/* ESPAÇO */
 .mt-20 {
     margin-top: 20px;
 }
@@ -137,10 +135,19 @@ header {
             {% if agendamentos %}
                 {% for agendamento in agendamentos %}
                     <div class="item">
-                        <strong>Médico:</strong> {{ agendamento.medico.user.first_name }}<br>
-                        <strong>Especialidade:</strong> {{ agendamento.medico.especialidade.nome }}<br>
-                        <strong>Data:</strong> {{ agendamento.data }}<br>
-                        <strong>Horário:</strong> {{ agendamento.horario.hora }}
+
+                        <strong>Médico:</strong>
+                        {{ agendamento.horario.periodo.agenda.medico.user.first_name }}<br>
+
+                        <strong>Especialidade:</strong>
+                        {{ agendamento.horario.periodo.agenda.medico.medicoespecialidade_set.first.especialidade.nome }}<br>
+
+                        <strong>Data:</strong>
+                        {{ agendamento.horario.inicio|date:"d/m/Y" }}<br>
+
+                        <strong>Horário:</strong>
+                        {{ agendamento.horario.inicio|date:"H:i" }}
+
                     </div>
                 {% endfor %}
             {% else %}
