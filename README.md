@@ -80,29 +80,24 @@ O sistema segue uma arquitetura baseada em **API REST**, onde:
 
 ---
 
-
----
-
 ## ⚙️ Como executar o projeto
 
 Clonando o projeto
 
 ```bash
-git clone https://github.com/geissianeassuncao/seu-repositorio.git
-
-```
-Entrando no Repositório
-
-```bash
+git clone https://github.com/geissianeassuncao/projeto-final-dev-soft.git
 cd projeto-final-dev-soft
 ```
 
-Abrindo o projeto com Vs Code
+Abrir no Vs Code (opcional)
 ```bash
-cd .
+code .
 ```
 
-Para esse projeto, são necessários dois terminais, um para a aplicação Backend(Django) e outro para aplicação WebRTC
+Para esse projeto, são necessários dois terminais:
+
+- um para o Backend (Django)
+- outro para o WebRTC (Node.js)
 
 ### 🔹 Backend (Django)
 
@@ -131,20 +126,41 @@ python manage.py runserver
 
 ```
 
+## 👤 Acesso ao sistema
+
+```bash
+# Entrar na pasta do backend
+cd backend
+
+# Criar usuário administrador
+python manage.py createsuperuser
+```
+
+Acesse:
+
+http://127.0.0.1:8000/admin/
+
+Crie usuários e vincule-os como:
+
+- paciente
+- médico
+
 🔹 WebRTC (Node.js)
 
 ```bash
 
 # Entrar na pasta do WebRTC
-cd webrtc-server
+cd webrtc
 
 # Instalar dependências
 npm install
 
 # Rodar servidor
-node server.js
+npm start
 
 ```
+
+Agora só precisa voltar a tela de login e entrar como médico ou paciente. Em seguida, clicar na opção iniciar chamada
 
 ## ⚠️ Observações
 
