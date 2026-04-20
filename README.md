@@ -85,22 +85,45 @@ O sistema segue uma arquitetura baseada em **API REST**, onde:
 
 ## ⚙️ Como executar o projeto
 
+Clonando o projeto
+
+```bash
+git clone https://github.com/geissianeassuncao/seu-repositorio.git
+
+```
+Entrando no Repositório
+
+```bash
+cd projeto-final-dev-soft
+```
+
+Abrindo o projeto com Vs Code
+```bash
+cd .
+```
+
 Para esse projeto, são necessários dois terminais, um para a aplicação Backend(Django) e outro para aplicação WebRTC
 
 ### 🔹 Backend (Django)
 
 ```bash
 
-## Entrar na pasta do servidor
-cd ProjetoFinalDS
+# Criar ambiente virtual
+python -m venv venv
 
-# Ative o ambiente virtual (Windows)
+# (Windows) liberar execução de scripts (caso necessário)
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+# Ativar ambiente virtual
 .\venv\Scripts\activate
 
 # Instalar dependências
 pip install -r requirements.txt
 
-# Execute as migrações
+# Entrar na pasta do backend
+cd backend
+
+# Rodar migrações
 python manage.py migrate
 
 # Rodar servidor
@@ -112,7 +135,7 @@ python manage.py runserver
 
 ```bash
 
-# Entrar na pasta do servidor
+# Entrar na pasta do WebRTC
 cd webrtc-server
 
 # Instalar dependências
